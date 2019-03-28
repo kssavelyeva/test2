@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import org.openqa.selenium.interactions.Actions;
 
 public class EmptyFieldError extends BaseRunner {
     @Test
@@ -103,7 +104,8 @@ public class EmptyFieldError extends BaseRunner {
         driver.findElement(By.name("q")).sendKeys("мобайл тинькофф");
                 //  driver.findElements(By.xpath("//ul[@role='listbox']/li"));
         List<WebElement> elements = driver.findElements(By.xpath("//ul[@role='listbox']//li/descendant ::div[@class='sbl1']"));
-        Thread.sleep(10000);
+        Thread.sleep(1000); /// исправить на wait
+
         for (int i=0; i<elements.size(); i++)
         {
             String listitem = elements.get(i).getText();
@@ -113,18 +115,41 @@ public class EmptyFieldError extends BaseRunner {
                 break;
             }
         }
+        driver.getTitle().equals("тинькофф мобайл тарифы - Поиск в Google");
+        String tabGoogle = driver.getWindowHandle();
+        System.out.println(tabGoogle);
 
 
 
-        driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Подборки'])[1]/following::b[1]")).click();
-        driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Все результаты'])[3]/following::h3[1]")).click();
-        // ERROR: Caught exception [ERROR: Unsupported command [selectWindow | win_ser_1 | ]]
-        driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Нижегородская область'])[1]/following::p[1]")).click();
-        assertEquals("Тарифы Тинькофф Мобайла", driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Нижегородская область'])[1]/following::p[1]")).getText());
-        // ERROR: Caught exception [ERROR: Unsupported command [selectWindow | win_ser_local | ]]
-        driver.close();
-        // ERROR: Caught exception [ERROR: Unsupported command [selectWindow | win_ser_1 | ]]
+        List<WebElement> resultElements = driver.findElements(By.xpath("//div[@class='rc']//a[@href]//cite[@class='iUh30']"));
 
+        Thread.sleep(1000); /// исправить на wait
+
+        for(int i=0; i<resultElements.size(); i++){
+//            System.out.println(resultElements.getAttribute("href"));
+//            System.out.println(element.getText());
+             String listitem = resultElements.get(i).getText();
+
+            if (listitem.contains("https://www.tinkoff.ru/mobile-operator/tariffs/"))
+              resultElements.get(i).click();
+            break;
+        }
+        Thread.sleep(1000); /// исправить на wait
+
+        driver.getTitle().equals("Тарифы Тинькофф Мобайла");
+
+        driver.switchTo().window(tabGoogle).close();
+        Thread.sleep(100000);
+        String urlMobile = driver.getCurrentUrl();
+
+        assertEquals(urlMobile, "https://www.tinkoff.ru/mobile-operator/tariffs/");
+        //driver.close();
+     //   Actions actions = new Actions(driver);
+        //actions.keyDown(Keys.CONTROL).sendKeys("W").build().perform();
+//        driver.switchTo().window(tabGoogle);
+//        driver.getWindowHandle()
+
+        Thread.sleep(1000);
     }
 }
 
