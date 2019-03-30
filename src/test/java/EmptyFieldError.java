@@ -8,9 +8,14 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.*;
 import java.time.Duration;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 
 public class EmptyFieldError extends BaseRunner {
     @Test
@@ -143,13 +148,111 @@ public class EmptyFieldError extends BaseRunner {
         String urlMobile = driver.getCurrentUrl();
 
         assertEquals(urlMobile, "https://www.tinkoff.ru/mobile-operator/tariffs/");
-        //driver.close();
-     //   Actions actions = new Actions(driver);
-        //actions.keyDown(Keys.CONTROL).sendKeys("W").build().perform();
-//        driver.switchTo().window(tabGoogle);
-//        driver.getWindowHandle()
-
         Thread.sleep(1000);
+    }
+
+    @Test
+    public void inactiveButton() {
+        driver.get(baseUrl);
+
+        driver.findElement(By.xpath("//span[contains(text(),'Нет, изменить') and @class='MvnoRegionConfirmation__option_v9PfP MvnoRegionConfirmation__optionRejection_1NrnL']")).click();
+        driver.findElement(By.xpath("//div[contains(text(),'Москва и Московская обл.')]")).click();
+        wait.until(d-> d.findElement(By.xpath("//div[@class='MobileOperatorProductCalculator__root_3WX9U']")));
+
+        driver.findElement(By.xpath("//span[@class='ui-select__value']")).click();
+
+        driver.findElement(By.xpath("//span[contains(text(),'Не имею гражданства РФ')]")).click();
+
+        driver.findElement(By.name("temp_non_resident_nationality")).sendKeys("Украина");
+        driver.findElement(By.cssSelector("input[name='phone_mobile']")).sendKeys("(999) 999-99-00");
+        driver.findElement(By.cssSelector("input[name='email']")).sendKeys("my@yandex.ru");
+        driver.findElement(By.cssSelector("input[name='fio']")).click();
+        driver.findElement(By.cssSelector("input[name='fio']")).sendKeys("Иванов Иван");
+
+        driver.findElement(By.xpath("//div[@class='BlockingButton__blockingButton_N-UUk']")).click();
+
+        driver.findElement(By.xpath("//div[@class='UIAppointmentForm__button_xyTKE UIAppointmentForm__buttonPrimary_P00g7']//button[@type='button']")).isEnabled();
+
+
+    }
+
+    @Test
+    public void changeRegion() throws InterruptedException {
+        driver.get(baseUrl);
+        Thread.sleep(1000);
+        driver.findElement(By.xpath("//span[contains(text(),'Нет, изменить') and @class='MvnoRegionConfirmation__option_v9PfP MvnoRegionConfirmation__optionRejection_1NrnL']")).click();
+        driver.findElement(By.xpath("//div[contains(text(),'Москва и Московская обл.')]")).click();
+        wait.until(d-> d.findElement(By.xpath("//div[@class='MobileOperatorProductCalculator__root_3WX9U']")));  //ghjdthbnm
+        driver.navigate().refresh();
+        driver.getCurrentUrl().contains(baseUrl);
+        assertNotEquals(By.xpath("//h3[contains(text(),'Общая цена')]").toString(),"296");
+
+
+
+
+
+        driver.findElement(By.xpath("//div[@class='ui-form__fieldset ui-form__fieldset_inline ui-form__fieldset_column-mob']/div[2]/div[@class='ui-form__field']")).click();
+        List<WebElement> resultCalls = driver.findElements(By.xpath("//div[@class='MobileOperatorProductCalculator__root_3WX9U']/" +
+                "div[@class='ui-form']/div[@class='ui-form__row']/div[@class='ui-form__fieldset ui-form__fieldset_focused ui-form__fieldset_inline " +
+                "ui-form__fieldset_column-mob']/div[2]/div[1]//span[@class='ui-dropdown-field-list__item-text']"));
+
+        System.out.println(resultCalls.size());
+        //span[@class='ui-dropdown-field-list__item-text']"
+        Thread.sleep(1000); /// исправить на wait
+
+        for (int i=0; i<resultCalls.size(); i++)
+        {
+            String listitem = resultCalls.get(i).getAttribute("innerHTML");
+
+            System.out.println(listitem);
+            if(listitem.contains("Безлимитные минуты"))
+            {
+                resultCalls.get(i).click();
+                break;
+            }
+        }
+
+        driver.findElement(By.xpath("//body/div[@class='application']/div[@data-qa-file='UIFormAppPopup']/div[@class='PlatformLayout__layout_1an9n ui-layout']/div[@class='PlatformLayout__layoutPage_1e7Pm']/div[@class='UILayoutPage__page_VOKnn']/div[@class='UILayoutWrapper__wrapper_2RHiZ']/div[@class='PortalContainer__container_1xEgI']/div[@class='form-app-personalized-landing-page']/div[@id='x9c051']/div[@data-qa-file='UniversalErrorFallback']/div[@data-qa-file='BackgroundForBlock']/div[@class='ResponsiveContainer__section_2LKAl']/div[@data-qa-file='ResponsiveContainer']/div[@class='ResponsiveContainer__slimLayout_sUwff ResponsiveContainer__fullWidth_3jp4R']/div[@id='form']/div[@class='js-page-form']/div[@data-qa-file='FormStepsController']/div[@data-qa-file='aboutInfoPopup']/div[@data-qa-file='FormStepComponent']/div[@data-qa-file='UIFormWrapper']/div[@class='UIFormWrapper__container_1TIK8']/div[@data-qa-file='UIFormWrapper']/div[@id='form-application']/div[@data-qa-file='UIFormWrapper']/div[@class='ui-form__wrapper']/div[@class='FormStepComponent__formStepWrapper_1PTAs']/form[@class='ui-form']/div[@class='MobileOperatorProductCalculator__root_3WX9U']/div[@class='ui-form']/div[@class='ui-form__row']/div[@class='ui-form__fieldset ui-form__fieldset_inline ui-form__fieldset_column-mob']/div[1]/div[1]/div[1]/div[1]")).click();
+        //Thread.sleep(1000);
+
+
+        List<WebElement> resultElements = driver.findElements(By.xpath("//div[@class='MobileOperatorProductCalculator__root_3WX9U']/div[@class='ui-form']/div[@class='ui-form__row']//div[@class='ui-dropdown-field-list ui-dropdown-field-list__opened']//div[@data-qa-file='UIDropdownList']"));
+
+        Thread.sleep(1000); /// исправить на wait
+        System.out.println(resultElements.size());
+        //span[@class='ui-dropdown-field-list__item-text']"
+        Thread.sleep(1000); /// исправить на wait
+
+        for (int i=0; i<resultElements.size(); i++)
+        {
+            String listitem = resultElements.get(i).getAttribute("innerHTML");
+
+            System.out.println(listitem);
+            if(listitem.contains("Безлимитный"))
+            {
+                resultElements.get(i).click();
+                break;
+            }
+        }
+
+        Thread.sleep(100); /// исправить на wait
+
+        driver.findElement(By.xpath("//label[contains(text(),'Безлимитные СМС')]")).click();
+        driver.findElement(By.xpath("//label[contains(text(),'Режим модема')]")).click();
+
+        Thread.sleep(100); /// исправить на wait
+
+
+
+        assertEquals("2546",driver.findElement(By.xpath("//h3[contains(text(),'Общая цена')]")).getText().replaceAll("[^0-9]", ""));
+
+
+        driver.findElement(By.cssSelector("input[name='fio']")).sendKeys("Иванов Иван");
+
+        
+
+
+
     }
 }
 
@@ -171,3 +274,18 @@ public class EmptyFieldError extends BaseRunner {
             }
         return d.getTitle().equals("тинькофф мобайл тарифы - Поиск в Google");
         });*/
+
+/*List<WebElement> resultElements = driver.findElements(By.xpath("//div[@class='MobileOperatorProductCalculator__root_3WX9U']/div[@class='ui-form']/div[@class='ui-form__row']/div[@class='ui-form__fieldset ui-form__fieldset_inline ui-form__fieldset_column-mob']/div[1]/div[1]//div[@class='ui-dropdown-field-list__item-view ui-select__option_with-subtext_right-side']/span[@class='ui-dropdown-field-list__item-text']"));
+                //span[@class='ui-dropdown-field-list__item-text']"
+        Thread.sleep(1000); /// исправить на wait
+
+        for(int i=0; i<resultElements.size(); i++){
+//
+            String listitem = resultElements.get(i).getAttribute("innerHTML");
+
+            System.out.println(resultElements);
+
+            if (listitem.contains("Безлимитный интернет"))
+                resultElements.get(i).click();
+            break;
+        }*/
