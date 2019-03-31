@@ -14,7 +14,7 @@ public class BaseRunner {
     @Before
     public void setUp() {
         driver = BrowsersFactory.chrome.create();
-        wait = new WebDriverWait(driver,10);
+        wait = new WebDriverWait(driver,20);
         driver.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
         driver.manage().window().maximize();
         baseUrl = "https://www.tinkoff.ru/mobile-operator/tariffs/";

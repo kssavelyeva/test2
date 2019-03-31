@@ -200,29 +200,9 @@ public class EmptyFieldError extends BaseRunner {
        s.selectCalls(f,d);
         s.currentValue("Звонки");
 
-
-       /* List<WebElement> resultCalls = driver.findElements(By.xpath("//div[1]/span[contains(text(), 'Звонки')]/ancestor::div[@data-qa-file='UIDropdownField']/div[@data-qa-file='UIDropdownList']/div"));
-
-        System.out.println(resultCalls.size());
-        //span[@class='ui-dropdown-field-list__item-text']"
-        Thread.sleep(1000); /// исправить на wait
-
-        for (int i=0; i<resultCalls.size(); i++)
-        {
-            String listitem = resultCalls.get(i).getAttribute("innerHTML");
-
-            System.out.println(listitem);
-            if(listitem.contains("Безлимитные минуты"))
-            {
-                resultCalls.get(i).click();
-                break;
-            }
-        }*/
-
         driver.findElement(By.xpath("//span[contains(text(), 'Интернет')]/ancestor::div[@data-qa-file='UIDropdownField']")).click();
         Thread.sleep(1000);
 
-//div[@class='MobileOperatorProductCalculator__root_3WX9U']/div[@class='ui-form']/div[@class='ui-form__row']/div[@class='ui-form__fieldset ui-form__fieldset_inline ui-form__fieldset_column-mob']/div[1]/div[1]/div[1]/div[1]
 
         List<WebElement> resultElements = driver.findElements(By.xpath("//span[contains(text(), 'Интернет')]/ancestor::div[@data-qa-file='UIDropdownField']/div[@data-qa-file='UIDropdownList']/div"));
 //div[@class='MobileOperatorProductCalculator__root_3WX9U']/div[@class='ui-form']/div[@class='ui-form__row']//div[@class='ui-dropdown-field-list ui-dropdown-field-list__opened']//div[@data-qa-file='UIDropdownList']
@@ -246,9 +226,15 @@ public class EmptyFieldError extends BaseRunner {
         Thread.sleep(100); /// исправить на wait
 
         //driver.findElement(By.xpath("//label[contains(text(),'Безлимитные СМС')]")).click();
-        CheckBox ch = new CheckBox(driver);
-        ch.chekBoxActive(true, "СМС");
-        ch.chekBoxDeactive(true, "СМС");
+        //CheckBox ch = new CheckBox(driver);
+       // driver.findElement(By.xpath("//label[contains(text(),'СМС')]/../div/*/*/input")).click();
+
+        CheckBox chekbox = new CheckBox(driver);
+        chekbox.chekBoxActive(true, "СМС");
+        Thread.sleep(1000);
+        chekbox.chekBoxActive(false, "СМС");
+        chekbox.chekBoxLabel("СМС");
+        chekbox.chekBoxStatus("СМС");
 
         driver.findElement(By.xpath("//label[contains(text(),'Режим модема')]")).click();
 

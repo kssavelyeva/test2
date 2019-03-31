@@ -13,23 +13,36 @@ public class CheckBox {
     WebDriver driver ;
     String name = "//label[contains(text(),'%s')]";
     String activeChekBox = "//label[contains(text(),'%s')]/../div";
+    String labelChekBox = "";
 
-    public CheckBox(WebDriver driver){
+   public CheckBox(WebDriver driver){
         this.driver = driver;
         return;
     }
 
-
-    String chekBox = "//label[contains(text(),'%s')]";
     public CheckBox chekBoxActive(boolean value, String name){
-        WebElement chek = driver.findElement(By.xpath(format(activeChekBox,name)));
-        if(chek.getText().contains("cheked")) System.out.println("Активен");
+        WebElement chekboxInfo = driver.findElement(By.xpath(format(activeChekBox,name)+"/*/*/*"));
+        WebElement chekbox= driver.findElement(By.xpath(format(activeChekBox,name)));
+        System.out.println(driver.findElement(By.xpath(format(activeChekBox,name)+"/*/*/*")));
+        if(!(chekboxInfo.getAttribute("innerHTML").contains("checked"))== true)  chekbox.click();
+        else  chekbox.click();
+        System.out.println(driver.findElement(By.xpath(format(activeChekBox,name))));
+
         return this;
     }
-    public CheckBox chekBoxDeactive(boolean value, String name){
-        WebElement chek = driver.findElement(By.xpath(format(activeChekBox,name)));
-        if(chek.getText().contains("cheked")) System.out.println("Активен");
-        else chek.click();
+
+    public CheckBox chekBoxLabel(String name){
+        System.out.println(driver.findElement(By.xpath(format(activeChekBox+"/../label", name))).getText());
         return this;
+    }
+
+    public void  chekBoxStatus(String name){
+        WebElement chek = driver.findElement(By.xpath(format(activeChekBox,name)));
+        if(chek.getAttribute("innerHTML").contains("cheked"))
+        {
+            System.out.println("Активен"+chek.getAttribute("innerHTML") );
+        }
+        else  {System.out.println("Не активен"+chek.getAttribute("innerHTML") );}
+
     }
 }
