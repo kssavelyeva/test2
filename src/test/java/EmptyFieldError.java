@@ -11,13 +11,16 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.Select;
+
 
 public class EmptyFieldError extends BaseRunner {
+
+
     @Test
     public void testEmptyFieldError() {
         driver.get(baseUrl);
@@ -183,18 +186,22 @@ public class EmptyFieldError extends BaseRunner {
         driver.findElement(By.xpath("//span[contains(text(),'Нет, изменить') and @class='MvnoRegionConfirmation__option_v9PfP MvnoRegionConfirmation__optionRejection_1NrnL']")).click();
         driver.findElement(By.xpath("//div[contains(text(),'Москва и Московская обл.')]")).click();
         wait.until(d-> d.findElement(By.xpath("//div[@class='MobileOperatorProductCalculator__root_3WX9U']")));  //ghjdthbnm
-        driver.navigate().refresh();
+
+        /*driver.navigate().refresh();
         driver.getCurrentUrl().contains(baseUrl);
-        assertNotEquals(By.xpath("//h3[contains(text(),'Общая цена')]").toString(),"296");
+        assertNotEquals(By.xpath("//h3[contains(text(),'Общая цена')]").toString(),"296");*/
 
 
+       driver.findElement(By.xpath("//span[contains(text(), 'Звонки')]/ancestor::div[@data-qa-file='UIDropdownField']")).click();
+
+        Selec s = new Selec(driver);
+        String f = "Звонки";
+        String d = "Безлимитные минуты";
+       s.selectCalls(f,d);
+        s.currentValue("Звонки");
 
 
-
-        driver.findElement(By.xpath("//div[@class='ui-form__fieldset ui-form__fieldset_inline ui-form__fieldset_column-mob']/div[2]/div[@class='ui-form__field']")).click();
-        List<WebElement> resultCalls = driver.findElements(By.xpath("//div[@class='MobileOperatorProductCalculator__root_3WX9U']/" +
-                "div[@class='ui-form']/div[@class='ui-form__row']/div[@class='ui-form__fieldset ui-form__fieldset_focused ui-form__fieldset_inline " +
-                "ui-form__fieldset_column-mob']/div[2]/div[1]//span[@class='ui-dropdown-field-list__item-text']"));
+       /* List<WebElement> resultCalls = driver.findElements(By.xpath("//div[1]/span[contains(text(), 'Звонки')]/ancestor::div[@data-qa-file='UIDropdownField']/div[@data-qa-file='UIDropdownList']/div"));
 
         System.out.println(resultCalls.size());
         //span[@class='ui-dropdown-field-list__item-text']"
@@ -210,14 +217,15 @@ public class EmptyFieldError extends BaseRunner {
                 resultCalls.get(i).click();
                 break;
             }
-        }
+        }*/
 
-        driver.findElement(By.xpath("//body/div[@class='application']/div[@data-qa-file='UIFormAppPopup']/div[@class='PlatformLayout__layout_1an9n ui-layout']/div[@class='PlatformLayout__layoutPage_1e7Pm']/div[@class='UILayoutPage__page_VOKnn']/div[@class='UILayoutWrapper__wrapper_2RHiZ']/div[@class='PortalContainer__container_1xEgI']/div[@class='form-app-personalized-landing-page']/div[@id='x9c051']/div[@data-qa-file='UniversalErrorFallback']/div[@data-qa-file='BackgroundForBlock']/div[@class='ResponsiveContainer__section_2LKAl']/div[@data-qa-file='ResponsiveContainer']/div[@class='ResponsiveContainer__slimLayout_sUwff ResponsiveContainer__fullWidth_3jp4R']/div[@id='form']/div[@class='js-page-form']/div[@data-qa-file='FormStepsController']/div[@data-qa-file='aboutInfoPopup']/div[@data-qa-file='FormStepComponent']/div[@data-qa-file='UIFormWrapper']/div[@class='UIFormWrapper__container_1TIK8']/div[@data-qa-file='UIFormWrapper']/div[@id='form-application']/div[@data-qa-file='UIFormWrapper']/div[@class='ui-form__wrapper']/div[@class='FormStepComponent__formStepWrapper_1PTAs']/form[@class='ui-form']/div[@class='MobileOperatorProductCalculator__root_3WX9U']/div[@class='ui-form']/div[@class='ui-form__row']/div[@class='ui-form__fieldset ui-form__fieldset_inline ui-form__fieldset_column-mob']/div[1]/div[1]/div[1]/div[1]")).click();
-        //Thread.sleep(1000);
+        driver.findElement(By.xpath("//span[contains(text(), 'Интернет')]/ancestor::div[@data-qa-file='UIDropdownField']")).click();
+        Thread.sleep(1000);
 
+//div[@class='MobileOperatorProductCalculator__root_3WX9U']/div[@class='ui-form']/div[@class='ui-form__row']/div[@class='ui-form__fieldset ui-form__fieldset_inline ui-form__fieldset_column-mob']/div[1]/div[1]/div[1]/div[1]
 
-        List<WebElement> resultElements = driver.findElements(By.xpath("//div[@class='MobileOperatorProductCalculator__root_3WX9U']/div[@class='ui-form']/div[@class='ui-form__row']//div[@class='ui-dropdown-field-list ui-dropdown-field-list__opened']//div[@data-qa-file='UIDropdownList']"));
-
+        List<WebElement> resultElements = driver.findElements(By.xpath("//span[contains(text(), 'Интернет')]/ancestor::div[@data-qa-file='UIDropdownField']/div[@data-qa-file='UIDropdownList']/div"));
+//div[@class='MobileOperatorProductCalculator__root_3WX9U']/div[@class='ui-form']/div[@class='ui-form__row']//div[@class='ui-dropdown-field-list ui-dropdown-field-list__opened']//div[@data-qa-file='UIDropdownList']
         Thread.sleep(1000); /// исправить на wait
         System.out.println(resultElements.size());
         //span[@class='ui-dropdown-field-list__item-text']"
@@ -237,7 +245,11 @@ public class EmptyFieldError extends BaseRunner {
 
         Thread.sleep(100); /// исправить на wait
 
-        driver.findElement(By.xpath("//label[contains(text(),'Безлимитные СМС')]")).click();
+        //driver.findElement(By.xpath("//label[contains(text(),'Безлимитные СМС')]")).click();
+        CheckBox ch = new CheckBox(driver);
+        ch.chekBoxActive(true, "СМС");
+        ch.chekBoxDeactive(true, "СМС");
+
         driver.findElement(By.xpath("//label[contains(text(),'Режим модема')]")).click();
 
         Thread.sleep(100); /// исправить на wait
