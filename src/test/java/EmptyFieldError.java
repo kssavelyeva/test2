@@ -25,7 +25,7 @@ public class EmptyFieldError extends BaseRunner {
     public void testEmptyFieldError() {
         driver.get(baseUrl);
         driver.findElement(By.xpath("//*[contains(@class, 'fio-field')]//*[contains(@class, 'ui-input__column')]")).click();
-        driver.findElement(By.xpath("//*[contains(@class, 'ui-form__row ui-form__row_checkbox _2NQKP')]//*[contains(@class, '_5tJV0')]")).click(); // чек-бокс
+//        driver.findElement(By.xpath("//*[contains(@class, 'ui-form__row ui-form__row_checkbox _2NQKP')]//*[contains(@class, '_5tJV0')]")).click(); // чек-бокс
         driver.findElement(By.xpath("//*[contains(@class, 'ui-form__row ui-form__row_tel')]")).click(); // телефон
 
         driver.findElement(By.xpath("//*[contains(@class, 'ui-dropdown-select ui-dropdown-select_mobile_native')]")).click(); // ниспадающий спсиок
@@ -236,7 +236,9 @@ public class EmptyFieldError extends BaseRunner {
         chekbox.chekBoxLabel("СМС");
         chekbox.chekBoxStatus("СМС");
 
-        driver.findElement(By.xpath("//label[contains(text(),'Режим модема')]")).click();
+        TextInput input = new TextInput(driver);
+        input.fillField("Фамилия", "ка");
+        input.currentValue("Фамилия");
 
         Thread.sleep(100); /// исправить на wait
 
