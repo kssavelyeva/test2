@@ -9,7 +9,7 @@ import static java.lang.String.format;
 
 public class TextInput {
     WebDriver driver ;
-    String name = "//span[contains(text(),'%s')]/../../../div/input[last()]";
+    String nameField = "//span[contains(text(),'%s')]/../../../div/input[last()]";
 
     public TextInput(WebDriver driver){
         this.driver = driver;
@@ -17,12 +17,12 @@ public class TextInput {
     }
 
     public TextInput fillField(String name, String value){
-        driver.findElement(By.xpath(format(name))).sendKeys(value);
+        driver.findElement(By.xpath(format(nameField,name))).sendKeys(value);
         return this;
     }
 
     public TextInput currentValue(String name){
-        System.out.println(driver.findElement(By.xpath(format(name))).getAttribute("value"));
+        System.out.println(driver.findElement(By.xpath(format(nameField,name))).getAttribute("value"));
         return this;
 
     }

@@ -140,8 +140,6 @@ public class EmptyFieldError extends BaseRunner {
             return tinkoffTitle;
         });
         driver.switchTo().window(tabGoogle).close();
-       /* String urlMobile = driver.getCurrentUrl();
-        assertEquals(urlMobile, "https://www.tinkoff.ru/mobile-operator/tariffs/");*/
         wait.until(d -> {
             boolean urlTinkoff = false;
             for(String title: driver.getWindowHandles()){
@@ -150,26 +148,35 @@ public class EmptyFieldError extends BaseRunner {
             }
             return urlTinkoff;
         });
-
     }
 
     @Test
-    public void inactiveButton() {
+    public void inactiveButton() throws InterruptedException {
         driver.get(baseUrl);
 
-        driver.findElement(By.xpath("//span[contains(text(),'Нет, изменить') and @class='MvnoRegionConfirmation__option_v9PfP MvnoRegionConfirmation__optionRejection_1NrnL']")).click();
+        driver.findElement(By.xpath("//span[contains(text(),'Нет, изменить') and" +
+                " @class='MvnoRegionConfirmation__option_v9PfP MvnoRegionConfirmation__optionRejection_1NrnL']")).click();
         driver.findElement(By.xpath("//div[contains(text(),'Москва и Московская обл.')]")).click();
+
         wait.until(d-> d.findElement(By.xpath("//div[@class='MobileOperatorProductCalculator__root_3WX9U']")));
 
-        driver.findElement(By.xpath("//span[@class='ui-select__value']")).click();
+        TextInput feild = new TextInput(driver);
+        feild.fillField("Фамилия","Иван Иванов");
+        feild.fillField("телефон", "999 999-99-00");
+        feild.fillField("Электронная почта","my@yandex.ru");
 
-        driver.findElement(By.xpath("//span[contains(text(),'Не имею гражданства РФ')]")).click();
+        CheckBox checkBox = new CheckBox(driver);
+        checkBox.chekBoxActive("Музыка", false);
+        checkBox.chekBoxActive("Мессенджеры", false);
+        checkBox.chekBoxActive("Социальные сети", false);
+        checkBox.chekBoxActive("Видео", false);
 
-        driver.findElement(By.name("temp_non_resident_nationality")).sendKeys("Украина");
-        driver.findElement(By.cssSelector("input[name='phone_mobile']")).sendKeys("(999) 999-99-00");
-        driver.findElement(By.cssSelector("input[name='email']")).sendKeys("my@yandex.ru");
-        driver.findElement(By.cssSelector("input[name='fio']")).click();
-        driver.findElement(By.cssSelector("input[name='fio']")).sendKeys("Иванов Иван");
+        //driver.findElement(By.xpath("//span[contains(text(), 'Звонки')]/ancestor::div[@data-qa-file='UIDropdownField']")).click();
+        Selec select = new Selec(driver);
+        select.selectClick("Звонки");
+        wait.until(d -> select.selectValue("Звонки", "0 минут"));
+        select.selectClick("Интернет");
+        wait.until(d -> select.selectValue("Интернет", "0 ГБ"));
 
         driver.findElement(By.xpath("//div[@class='BlockingButton__blockingButton_N-UUk']")).click();
 
@@ -193,11 +200,11 @@ public class EmptyFieldError extends BaseRunner {
 
        driver.findElement(By.xpath("//span[contains(text(), 'Звонки')]/ancestor::div[@data-qa-file='UIDropdownField']")).click();
 
-        Selec s = new Selec(driver);
+        /*Selec s = new Selec(driver);
         String f = "Звонки";
         String d = "Безлимитные минуты";
        s.selectCalls(f,d);
-        s.currentValue("Звонки");
+        s.currentValue("Звонки");*/
 
         driver.findElement(By.xpath("//span[contains(text(), 'Интернет')]/ancestor::div[@data-qa-file='UIDropdownField']")).click();
         Thread.sleep(1000);
@@ -229,9 +236,10 @@ public class EmptyFieldError extends BaseRunner {
        // driver.findElement(By.xpath("//label[contains(text(),'СМС')]/../div/*/*/input")).click();
 
         CheckBox chekbox = new CheckBox(driver);
-        chekbox.chekBoxActive(true, "СМС");
+        //chekbox.chekBoxActive(true, "СМС");
         Thread.sleep(1000);
-        chekbox.chekBoxActive(false, "СМС");
+        //chekbox.chekBoxActive(false, "СМС");
+        chekbox.chekBoxActive("СМС", false);
         chekbox.chekBoxLabel("СМС");
         chekbox.chekBoxStatus("СМС");
 

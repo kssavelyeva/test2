@@ -14,24 +14,30 @@ import java.util.List;
 public class Selec {
     String internetSelect = "//div[1]/span[contains(text(), '%s')]/ancestor::div[@data-qa-file='UIDropdownField']/div[@data-qa-file='UIDropdownList']/div";
     String selectCurrentValue = "//span[contains(text(), '%s')]/../div[@class='ui-select__title-flex']";
-    By CallsSelect;
+
+    String selectClick = "//span[contains(text(), '%s')]/ancestor::div[@data-qa-file='UIDropdownField']";
     protected WebDriver driver;
 
     public Selec(WebDriver driver) {
         this.driver = driver;
     }
 
-    public Selec selectCalls(String name, String value){
+    public Selec selectClick(String name){
+        driver.findElement(By.xpath(format(selectClick,name))).click();
+        return this;
+    }
+    public Selec selectValue(String name, String value){
 
-       List<WebElement> resultCalls = driver.findElements(By.xpath(format(internetSelect, name)));
-        System.out.println(resultCalls.size());
-        for (int i=0; i<resultCalls.size(); i++)
+       List<WebElement> result = driver.findElements(By.xpath(format(internetSelect, name)));
+
+        System.out.println(result.size());
+        for (int i=0; i<result.size(); i++)
         {
-            String listitem = resultCalls.get(i).getAttribute("innerHTML");
+            String listitem = result.get(i).getAttribute("innerHTML");
             System.out.println(listitem);
             if(listitem.contains(value))
             {
-                resultCalls.get(i).click();
+                result.get(i).click();
                 break;
             }
         }

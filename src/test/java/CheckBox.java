@@ -13,21 +13,23 @@ public class CheckBox {
     WebDriver driver ;
     String name = "//label[contains(text(),'%s')]";
     String activeChekBox = "//label[contains(text(),'%s')]/../div";
-    String labelChekBox = "";
 
    public CheckBox(WebDriver driver){
         this.driver = driver;
         return;
     }
 
-    public CheckBox chekBoxActive(boolean value, String name){
+    public CheckBox chekBoxActive(String name, boolean value){
         WebElement chekboxInfo = driver.findElement(By.xpath(format(activeChekBox,name)+"/*/*/*"));
         WebElement chekbox= driver.findElement(By.xpath(format(activeChekBox,name)));
-        System.out.println(driver.findElement(By.xpath(format(activeChekBox,name)+"/*/*/*")));
-        if(!(chekboxInfo.getAttribute("innerHTML").contains("checked"))== true)  chekbox.click();
-        else  chekbox.click();
-        System.out.println(driver.findElement(By.xpath(format(activeChekBox,name))));
-
+        WebElement c = driver.findElement(By.xpath(format(activeChekBox,name)));
+        System.out.println(chekboxInfo);
+       // System.out.println(driver.findElement(By.xpath(format(activeChekBox,name)+"/*/*/*")));
+        if(!(c.getAttribute("innerHTML").contains("checked"))== value)
+        {
+            chekbox.click();
+        }
+        //System.out.println(driver.findElement(By.xpath(format(activeChekBox,name))));
         return this;
     }
 
