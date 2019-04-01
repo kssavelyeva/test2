@@ -110,7 +110,7 @@ public class EmptyFieldError extends BaseRunner {
 
     }
     @Test
-    public void testSwithcTabs () throws InterruptedException {
+    public void testSwithcTabs () {
         driver.get("https://www.google.ru/");
 
         driver.findElement(By.name("q")).sendKeys("мобайл тинькофф");
@@ -160,9 +160,11 @@ public class EmptyFieldError extends BaseRunner {
     }
 
     @Test
-    public void inactiveButton() throws InterruptedException {
+    public void inactiveButton() {
         driver.get(baseUrl);
 
+        wait.until(d -> d.findElement(By.xpath("//span[contains(text(),'Нет, изменить') and" +
+                        " @class='MvnoRegionConfirmation__option_v9PfP MvnoRegionConfirmation__optionRejection_1NrnL']")));
         driver.findElement(By.xpath("//span[contains(text(),'Нет, изменить') and" +
                 " @class='MvnoRegionConfirmation__option_v9PfP MvnoRegionConfirmation__optionRejection_1NrnL']")).click();
         driver.findElement(By.xpath("//div[contains(text(),'Москва и Московская обл.')]")).click();
@@ -180,14 +182,14 @@ public class EmptyFieldError extends BaseRunner {
         checkBox.chekBoxActive("Социальные сети", false);
         checkBox.chekBoxActive("Видео", false);
 
-        //driver.findElement(By.xpath("//span[contains(text(), 'Звонки')]/ancestor::div[@data-qa-file='UIDropdownField']")).click();
         Selec select = new Selec(driver);
         select.selectClick("Звонки");
         wait.until(d -> select.selectValue("Звонки", "0 минут"));
         select.selectClick("Интернет");
         wait.until(d -> select.selectValue("Интернет", "0 ГБ"));
 
-        driver.findElement(By.xpath("//div[@class='BlockingButton__blockingButton_N-UUk']")).click();
+        Button button = new Button(driver);
+        button.buttonClick("Заказать");
 
         driver.findElement(By
                 .xpath("//div[@class='UIAppointmentForm__button_xyTKE UIAppointmentForm__buttonPrimary_P00g7']//button[@type='button']"))
@@ -195,9 +197,11 @@ public class EmptyFieldError extends BaseRunner {
     }
 
     @Test
-    public void changeRegion() throws InterruptedException {
+    public void changeRegion() {
         driver.get(baseUrl);
-        Thread.sleep(1000);
+
+        wait.until(d -> d.findElement(By.xpath("//span[contains(text(),'Нет, изменить') and" +
+                " @class='MvnoRegionConfirmation__option_v9PfP MvnoRegionConfirmation__optionRejection_1NrnL']")));
         driver.findElement(By.
                 xpath("//span[contains(text(),'Нет, изменить') " +
                         "and @class='MvnoRegionConfirmation__option_v9PfP MvnoRegionConfirmation__optionRejection_1NrnL']"))
