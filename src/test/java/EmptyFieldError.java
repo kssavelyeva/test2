@@ -24,6 +24,8 @@ public class EmptyFieldError extends BaseRunner {
     @Test
     public void testEmptyFieldError() {
         driver.get(baseUrl);
+
+
         driver.findElement(By.xpath("//*[contains(@class, 'fio-field')]//*[contains(@class, 'ui-input__column')]")).click();
         driver.findElement(By.xpath("//label[@for='agreement']/..//../div[@tabindex]")).click(); // чек-бокс
         driver.findElement(By.xpath("//*[contains(@class, 'ui-form__row ui-form__row_tel')]")).click(); // телефон
@@ -103,10 +105,8 @@ public class EmptyFieldError extends BaseRunner {
         driver.get("https://www.google.ru/");
 
         driver.findElement(By.name("q")).sendKeys("мобайл тинькофф");
-                //  driver.findElements(By.xpath("//ul[@role='listbox']/li"));
         List<WebElement> elements = driver.findElements(By.xpath("//ul[@role='listbox']//li/descendant ::div[@class='sbl1']"));
-        Thread.sleep(1000); /// исправить на wait
-
+        wait.until(d -> {
         for (int i=0; i<elements.size(); i++)
         {
             String listitem = elements.get(i).getText();
@@ -114,37 +114,43 @@ public class EmptyFieldError extends BaseRunner {
             {
                 elements.get(i).click();
                 break;
-            }
-        }
-        driver.getTitle().equals("тинькофф мобайл тарифы - Поиск в Google");
+            }}
+            return d.getTitle().equals("мобайл тинькофф тарифы - Поиск в Google");
+        });
         String tabGoogle = driver.getWindowHandle();
-        System.out.println(tabGoogle);
-
-
-
         List<WebElement> resultElements = driver.findElements(By.xpath("//div[@class='rc']//a[@href]//cite[@class='iUh30']"));
 
-        Thread.sleep(1000); /// исправить на wait
-
-        for(int i=0; i<resultElements.size(); i++){
-//            System.out.println(resultElements.getAttribute("href"));
-//            System.out.println(element.getText());
-             String listitem = resultElements.get(i).getText();
-
-            if (listitem.contains("https://www.tinkoff.ru/mobile-operator/tariffs/"))
+        for(int i=0; i<resultElements.size(); i++)
+        {
+             String listitem = resultElements.get(i).getAttribute("innerHTML");
+             System.out.println(listitem);
+            if (listitem.equals("https://www.tinkoff.ru/mobile-operator/tariffs/"))
+            {
               resultElements.get(i).click();
             break;
+            }
         }
-        Thread.sleep(1000); /// исправить на wait
-
-        driver.getTitle().equals("Тарифы Тинькофф Мобайла");
-
+        wait.until(d -> {
+            boolean tinkoffTitle = false;
+            for (String title : driver.getWindowHandles()) {
+                driver.switchTo().window(title);
+                System.out.println(d.getTitle());
+                tinkoffTitle = d.getTitle().equals("Тарифы Тинькофф Мобайла");
+            }
+            return tinkoffTitle;
+        });
         driver.switchTo().window(tabGoogle).close();
-        Thread.sleep(100000);
-        String urlMobile = driver.getCurrentUrl();
+       /* String urlMobile = driver.getCurrentUrl();
+        assertEquals(urlMobile, "https://www.tinkoff.ru/mobile-operator/tariffs/");*/
+        wait.until(d -> {
+            boolean urlTinkoff = false;
+            for(String title: driver.getWindowHandles()){
+                driver.switchTo().window(title);
+                urlTinkoff = d.getCurrentUrl().equals("https://www.tinkoff.ru/mobile-operator/tariffs/");
+            }
+            return urlTinkoff;
+        });
 
-        assertEquals(urlMobile, "https://www.tinkoff.ru/mobile-operator/tariffs/");
-        Thread.sleep(1000);
     }
 
     @Test
