@@ -1,13 +1,9 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WebDriver;
-import org.junit.Test;
-import org.openqa.selenium.*;
 
-import static org.openqa.selenium.By.name;
-import static  org.openqa.selenium.By.xpath;
 import static java.lang.String.format;
-import org.openqa.selenium.support.PageFactory;
+
 
 import java.util.List;
 
