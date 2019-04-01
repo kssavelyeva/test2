@@ -9,7 +9,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 public enum BrowsersFactory {
     chrome {
         public  WebDriver create(){
+
             return  new ChromeDriver();
+
         }
     };
 
