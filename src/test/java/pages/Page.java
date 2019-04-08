@@ -1,16 +1,11 @@
-//import app.Application;
 package pages;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
+
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
+
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 public class Page {
     Logger logger = LoggerFactory.getLogger(Page.class);
@@ -23,24 +18,11 @@ public class Page {
         wait = new WebDriverWait(driver, 20);
         PageFactory.initElements(driver, this);
     }
-    public void getPage(String url) {
-        driver.navigate().to(url);
-    }
-    public  boolean pageLoaded(String titlePage){
-        wait.until(d -> d.getTitle().contains(titlePage));
-        return true;
-    }
 
-    public void switchTab(String nameTab){
-        wait.until(d -> {
-            boolean switchTab = false;
-            for(String pageTitle : driver.getWindowHandles()){
-                driver.switchTo().window(pageTitle);
-                switchTab = d.getTitle().equals(nameTab);
-            }
-            return switchTab;
-        });
-    }
+   public void closeCurrentTab(){
+       driver.close();
+       logger.info("Закрыта активная вкладка");
+   }
 
     public void switchToWindow(String windowName){
         wait.until(d -> {
@@ -52,24 +34,29 @@ public class Page {
             }
             return check;
         });
+        logger.info("Окно переклчено " + windowName);
     }
 
-// для поиска нет изменить
-    public List<WebElement> xpathSearcherByText(String searchText) {
-        String xpath = String.format("//*[contains(text(),'%s')]", searchText);
-        return driver.findElements(By.xpath(xpath));
+    public void switchbetweenWindows(int tabIndex) {
+        String handle = this.driver.getWindowHandles().toArray(new String[0])[tabIndex];
+        this.driver.switchTo().window(handle);
+        logger.info("Окно переклчено " );
     }
 
-    public  void openPage(String url){
-        driver.navigate().to(url);
+    public void getCurrentUrl(String url){
+        wait.until(d -> {
+            for(String title: driver.getWindowHandles()){
+                driver.switchTo().window(title);
+               d.getCurrentUrl().equals(url);
+            }
+            return this;
+        });
+        logger.info("Теккущее URL " + url );
     }
 
-    public void closeCurrentTab(){
-        driver.close();
-        logger.info("Закрыта вкладка");
+    public boolean pageLoaded(String substring) {
+        wait.until(d -> d.getTitle().contains(substring));
+        return true;
     }
 
-    public void switchToMainTab(){
-        driver.switchTo().window(driver.getWindowHandles().iterator().next());
-    }
 }
