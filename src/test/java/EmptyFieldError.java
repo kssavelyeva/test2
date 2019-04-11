@@ -92,7 +92,7 @@ public class EmptyFieldError extends BaseRunner {
 
     }
     @Test
-    public void testSwithcTabs () throws InterruptedException {
+    public void testSwithcTabs ()  {
         driver.get("https://www.google.ru/");
 
         driver.findElement(By.name("q")).sendKeys("мобайл тинькофф");
@@ -142,7 +142,7 @@ public class EmptyFieldError extends BaseRunner {
     }
 
     @Test
-    public void inactiveButton() throws InterruptedException {
+    public void inactiveButton() {
         driver.get(baseUrl);
 
         driver.findElement(By.xpath("//span[contains(text(),'Нет, изменить') and" +
@@ -162,8 +162,7 @@ public class EmptyFieldError extends BaseRunner {
         checkBox.chekBoxActive("Социальные сети", false);
         checkBox.chekBoxActive("Видео", false);
 
-        //driver.findElement(By.xpath("//span[contains(text(), 'Звонки')]/ancestor::div[@data-qa-file='UIDropdownField']")).click();
-        Selec select = new Selec(driver);
+        Select select = new Select(driver);
         select.selectClick("Звонки");
         wait.until(d -> select.selectValue("Звонки", "0 минут"));
         select.selectClick("Интернет");
@@ -192,9 +191,10 @@ public class EmptyFieldError extends BaseRunner {
                 driver.findElement(By.xpath("//div[contains(text(),'Москва и Московская область')]")).getText());
 
         wait.until(d-> d.findElement(By.xpath("//div[@class='MobileOperatorProductCalculator__root_3WX9U']")));
+        String moscovDeafultTotalPrice = driver.findElement(By.xpath("//h3[contains(text(),'Общая цена')]")).getText().replaceAll("[^0-9]", "");
         assertNotEquals("296",driver.findElement(By.xpath("//h3[contains(text(),'Общая цена')]")).getText().replaceAll("[^0-9]", ""));
 
-        Selec select = new Selec(driver);
+        Select select = new Select(driver);
         select.selectClick("Звонки");
         select.selectValue("Звонки", "Безлимитные минуты");
         select.selectClick("Интернет");
