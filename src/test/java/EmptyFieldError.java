@@ -192,7 +192,6 @@ public class EmptyFieldError extends BaseRunner {
 
         wait.until(d-> d.findElement(By.xpath("//div[@class='MobileOperatorProductCalculator__root_3WX9U']")));
         String moscovDeafultTotalPrice = driver.findElement(By.xpath("//h3[contains(text(),'Общая цена')]")).getText().replaceAll("[^0-9]", "");
-        assertNotEquals("296",driver.findElement(By.xpath("//h3[contains(text(),'Общая цена')]")).getText().replaceAll("[^0-9]", ""));
 
         Select select = new Select(driver);
         select.selectClick("Звонки");
@@ -206,7 +205,28 @@ public class EmptyFieldError extends BaseRunner {
         chekbox.chekBoxStatus("Режим");
         chekbox.chekBoxActive("Режим модема", true);
 
-        assertEquals("2546",driver.findElement(By.xpath("//h3[contains(text(),'Общая цена')]")).getText().replaceAll("[^0-9]", ""));
+        String moscovMaxTotalPrice = driver.findElement(By.xpath("//h3[contains(text(),'Общая цена')]")).getText().replaceAll("[^0-9]", "");
+
+         driver.findElement(By.xpath("//div[@class='MvnoRegionConfirmation__title_DOqnW']")).click();
+        driver.findElement(By.xpath("//div[contains(text(),'Краснодарский')]")).click();
+        String krasnodarDeafultTotalPrice = driver.
+                findElement(By.xpath("//h3[contains(text(),'Общая цена')]")).getText().replaceAll("[^0-9]", "");
+
+        assertNotEquals(moscovDeafultTotalPrice, krasnodarDeafultTotalPrice);
+
+        select.selectClick("Звонки");
+        select.selectValue("Звонки", "Безлимитные минуты");
+        select.selectClick("Интернет");
+        select.selectValue("Интернет","Безлимитный");
+
+        chekbox.chekBoxActive("СМС",true );
+        chekbox.chekBoxStatus("СМС");
+        chekbox.chekBoxStatus("Режим");
+        chekbox.chekBoxActive("Режим модема", true);
+
+        String krasnodarMaxTotalPrice = driver.
+                findElement(By.xpath("//h3[contains(text(),'Общая цена')]")).getText().replaceAll("[^0-9]", "");
+        assertEquals(krasnodarMaxTotalPrice, moscovMaxTotalPrice);
 
     }
 }
