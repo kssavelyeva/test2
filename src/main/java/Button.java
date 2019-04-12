@@ -18,7 +18,7 @@ public class Button {
         return this;
     }
 
-    public Button buttonLabel(String name){
+    public Button getButtonLabel(String name){
        System.out.println(driver.findElement(By.xpath(format(nameButton, name))).getText());
         return this;
     }

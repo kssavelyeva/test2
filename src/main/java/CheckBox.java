@@ -5,36 +5,38 @@ import static java.lang.String.format;
 
 public class CheckBox {
     WebDriver driver ;
-    String activeChekBox = "//label[contains(text(),'%s')]/../div";
+    String checkBox = "//label[contains(text(),'%s')]/../div";
 
    public CheckBox(WebDriver driver){
         this.driver = driver;
         return;
     }
 
-    public CheckBox chekBoxActive(String name, boolean value){
+    public CheckBox checkboxValue(String name, boolean value){
 
-        WebElement chekbox= driver.findElement(By.xpath(format(activeChekBox,name)));
+        WebElement checkbox= driver.findElement(By.xpath(format(checkBox,name)));
 
-        if(!(chekbox.getAttribute("innerHTML").contains("checked"))== value)
+        if(!(checkbox.getAttribute("innerHTML").contains("checked"))== value)
         {
-            chekbox.click();
+            checkbox.click();
         }
         return this;
     }
 
-    public CheckBox chekBoxLabel(String name){
-        System.out.println(driver.findElement(By.xpath(format(activeChekBox+"/../label", name))).getText());
+    public CheckBox getCheckboxLabel(String name){
+        System.out.println(driver.findElement(By.xpath(format(checkBox +"/../label", name))).getText());
         return this;
     }
 
-    public void  chekBoxStatus(String name){
-        WebElement chek = driver.findElement(By.xpath(format(activeChekBox,name)));
-        if(!(chek.getAttribute("innerHTML").contains("cheked")))
+    public boolean  getCheckboxStatus(String name){
+        WebElement checked = driver.findElement(By.xpath(format(checkBox,name)));
+        if(!(checked.getAttribute("innerHTML").contains("checked")))
         {
-            System.out.println("Не активен"+chek.getAttribute("innerHTML") );
+            System.out.println("Чек-бокс не активен "+ name );
+            return false;
         }
-        else  {System.out.println("Активен"+chek.getAttribute("innerHTML") );}
-
+        else  {System.out.println("Чек-бокс активен "+ name );
+               return true;
+        }
     }
 }

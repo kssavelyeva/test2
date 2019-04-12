@@ -151,21 +151,21 @@ public class EmptyFieldError extends BaseRunner {
 
         wait.until(d-> d.findElement(By.xpath("//div[@class='MobileOperatorProductCalculator__root_3WX9U']")));
 
-        TextInput feild = new TextInput(driver);
-        feild.fillField("Фамилия","Иван Иванов");
-        feild.fillField("телефон", "999 999-99-00");
-        feild.fillField("Электронная почта","my@yandex.ru");
+        TextInput field = new TextInput(driver);
+        field.fillField("Фамилия","Иван Иванов");
+        field.fillField("телефон", "999 999-99-00");
+        field.fillField("Электронная почта","my@yandex.ru");
 
         CheckBox checkBox = new CheckBox(driver);
-        checkBox.chekBoxActive("Музыка", false);
-        checkBox.chekBoxActive("Мессенджеры", false);
-        checkBox.chekBoxActive("Социальные сети", false);
-        checkBox.chekBoxActive("Видео", false);
+        checkBox.checkboxValue("Музыка", false);
+        checkBox.checkboxValue("Мессенджеры", false);
+        checkBox.checkboxValue("Социальные сети", false);
+        checkBox.checkboxValue("Видео", false);
 
         Select select = new Select(driver);
-        select.selectClick("Звонки");
+        select.openSelect("Звонки");
         wait.until(d -> select.selectValue("Звонки", "0 минут"));
-        select.selectClick("Интернет");
+        select.openSelect("Интернет");
         wait.until(d -> select.selectValue("Интернет", "0 ГБ"));
 
         driver.findElement(By.xpath("//div[@class='BlockingButton__blockingButton_N-UUk']")).click();
@@ -191,42 +191,38 @@ public class EmptyFieldError extends BaseRunner {
                 driver.findElement(By.xpath("//div[contains(text(),'Москва и Московская область')]")).getText());
 
         wait.until(d-> d.findElement(By.xpath("//div[@class='MobileOperatorProductCalculator__root_3WX9U']")));
-        String moscovDeafultTotalPrice = driver.findElement(By.xpath("//h3[contains(text(),'Общая цена')]")).getText().replaceAll("[^0-9]", "");
+        String moscowDefaultTotalPrice = driver.findElement(By.xpath("//h3[contains(text(),'Общая цена')]")).getText().replaceAll("[^0-9]", "");
 
         Select select = new Select(driver);
-        select.selectClick("Звонки");
+        select.openSelect("Звонки");
         select.selectValue("Звонки", "Безлимитные минуты");
-        select.selectClick("Интернет");
+        select.openSelect("Интернет");
         select.selectValue("Интернет","Безлимитный");
 
-        CheckBox chekbox = new CheckBox(driver);
-        chekbox.chekBoxActive("СМС",true );
-        chekbox.chekBoxStatus("СМС");
-        chekbox.chekBoxStatus("Режим");
-        chekbox.chekBoxActive("Режим модема", true);
+        CheckBox checkbox = new CheckBox(driver);
+        checkbox.checkboxValue("СМС",true );
+        checkbox.checkboxValue("Режим модема", true);
 
-        String moscovMaxTotalPrice = driver.findElement(By.xpath("//h3[contains(text(),'Общая цена')]")).getText().replaceAll("[^0-9]", "");
+        String moscowMaxTotalPrice = driver.findElement(By.xpath("//h3[contains(text(),'Общая цена')]")).getText().replaceAll("[^0-9]", "");
 
          driver.findElement(By.xpath("//div[@class='MvnoRegionConfirmation__title_DOqnW']")).click();
         driver.findElement(By.xpath("//div[contains(text(),'Краснодарский')]")).click();
-        String krasnodarDeafultTotalPrice = driver.
+        String krasnodarDefaultTotalPrice = driver.
                 findElement(By.xpath("//h3[contains(text(),'Общая цена')]")).getText().replaceAll("[^0-9]", "");
 
-        assertNotEquals(moscovDeafultTotalPrice, krasnodarDeafultTotalPrice);
+        assertNotEquals(moscowDefaultTotalPrice, krasnodarDefaultTotalPrice);
 
-        select.selectClick("Звонки");
+        select.openSelect("Звонки");
         select.selectValue("Звонки", "Безлимитные минуты");
-        select.selectClick("Интернет");
+        select.openSelect("Интернет");
         select.selectValue("Интернет","Безлимитный");
 
-        chekbox.chekBoxActive("СМС",true );
-        chekbox.chekBoxStatus("СМС");
-        chekbox.chekBoxStatus("Режим");
-        chekbox.chekBoxActive("Режим модема", true);
+        checkbox.checkboxValue("СМС",true );
+        checkbox.checkboxValue("Режим модема", true);
 
         String krasnodarMaxTotalPrice = driver.
                 findElement(By.xpath("//h3[contains(text(),'Общая цена')]")).getText().replaceAll("[^0-9]", "");
-        assertEquals(krasnodarMaxTotalPrice, moscovMaxTotalPrice);
+        assertEquals(krasnodarMaxTotalPrice, moscowMaxTotalPrice);
 
     }
 }

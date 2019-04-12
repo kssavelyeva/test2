@@ -16,7 +16,7 @@ public class TextInput {
         return this;
     }
 
-    public TextInput currentValue(String name){
+    public TextInput getCurrentValue(String name){
         System.out.println(driver.findElement(By.xpath(format(nameField,name))).getAttribute("value"));
         return this;
 
