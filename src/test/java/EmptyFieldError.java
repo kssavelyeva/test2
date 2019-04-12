@@ -1,21 +1,36 @@
+import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.By;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.*;
+import java.io.File;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 public class EmptyFieldError extends BaseRunner {
+    @Test
+    public void downloadFIle() throws InterruptedException {
+        driver.get("https://www.tinkoff.ru/mobile-operator/documents/");
+        wait.until(d -> d.findElement(By.xpath("//div[@class='PlatformLayout__layoutPageComponent_1_h0K']//div[4]")));
+        driver.findElement(By.xpath("//div[@class='PlatformLayout__layoutPageComponent_1_h0K']//div[4]")).click();
 
+        Thread.sleep(5000);
+        File listF[] = folder.listFiles();
+        Assert.assertTrue(listF.length>0);
+
+        for(File file:listF){
+            Assert.assertTrue(file.length()>0);
+        }
+
+    }
 
     @Test
     public void testEmptyFieldError() {
         driver.get(baseUrl);
-
 
         driver.findElement(By.xpath("//*[contains(@class, 'fio-field')]//*[contains(@class, 'ui-input__column')]")).click();
         driver.findElement(By.xpath("//label[@for='agreement']/..//../div[@tabindex]")).click(); // чек-бокс
@@ -92,7 +107,7 @@ public class EmptyFieldError extends BaseRunner {
 
     }
     @Test
-    public void testSwithcTabs ()  {
+    public void testSwitchTabs ()  {
         driver.get("https://www.google.ru/");
 
         driver.findElement(By.name("q")).sendKeys("мобайл тинькофф");
@@ -113,9 +128,9 @@ public class EmptyFieldError extends BaseRunner {
 
         for(int i=0; i<resultElements.size(); i++)
         {
-             String listitem = resultElements.get(i).getAttribute("innerHTML");
-             System.out.println(listitem);
-            if (listitem.equals("https://www.tinkoff.ru/mobile-operator/tariffs/"))
+             String listItem = resultElements.get(i).getAttribute("innerHTML");
+             System.out.println(listItem);
+            if (listItem.equals("https://www.tinkoff.ru/mobile-operator/tariffs/"))
             {
               resultElements.get(i).click();
             break;
